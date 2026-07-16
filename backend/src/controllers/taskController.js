@@ -1,15 +1,11 @@
 const { validationResult } = require('express-validator');
 const Task = require('../models/Task');
 
-// ─── @route   GET /api/tasks ──────────────────────────────────
-// ─── @access  Private
-// Supports: ?status=pending|completed  ?priority=Low|Medium|High
-//           ?category=...  ?search=...  ?sort=dueDate|-dueDate|createdAt|-createdAt
+
 const getTasks = async (req, res) => {
   try {
     const { status, priority, category, search, sort } = req.query;
 
-    // Always scope to the logged-in user
     const filter = { user: req.user._id };
 
     if (status)   filter.status   = status;
@@ -22,7 +18,7 @@ const getTasks = async (req, res) => {
       ];
     }
 
-    // Sorting
+   
     const sortMap = {
       dueDate:    { dueDate: 1 },
       '-dueDate': { dueDate: -1 },
@@ -33,7 +29,7 @@ const getTasks = async (req, res) => {
 
     const tasks = await Task.find(filter).sort(sortBy);
 
-    // Stats for the dashboard header cards
+   
     const total     = await Task.countDocuments({ user: req.user._id });
     const pending   = await Task.countDocuments({ user: req.user._id, status: 'pending' });
     const completed = await Task.countDocuments({ user: req.user._id, status: 'completed' });
@@ -49,8 +45,7 @@ const getTasks = async (req, res) => {
   }
 };
 
-// ─── @route   GET /api/tasks/:id ─────────────────────────────
-// ─── @access  Private
+
 const getTask = async (req, res) => {
   try {
     const task = await Task.findOne({ _id: req.params.id, user: req.user._id });
@@ -63,8 +58,6 @@ const getTask = async (req, res) => {
   }
 };
 
-// ─── @route   POST /api/tasks ────────────────────────────────
-// ─── @access  Private
 const createTask = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -95,8 +88,7 @@ const createTask = async (req, res) => {
   }
 };
 
-// ─── @route   PUT /api/tasks/:id ─────────────────────────────
-// ─── @access  Private
+
 const updateTask = async (req, res) => {
   try {
     const task = await Task.findOne({ _id: req.params.id, user: req.user._id });
@@ -121,8 +113,7 @@ const updateTask = async (req, res) => {
   }
 };
 
-// ─── @route   DELETE /api/tasks/:id ──────────────────────────
-// ─── @access  Private
+
 const deleteTask = async (req, res) => {
   try {
     const task = await Task.findOneAndDelete({ _id: req.params.id, user: req.user._id });
@@ -135,8 +126,7 @@ const deleteTask = async (req, res) => {
   }
 };
 
-// ─── @route   PATCH /api/tasks/:id/complete ──────────────────
-// ─── @access  Private  (Management → Marks Complete from ER diagram)
+
 const markComplete = async (req, res) => {
   try {
     const task = await Task.findOne({ _id: req.params.id, user: req.user._id });
@@ -157,8 +147,6 @@ const markComplete = async (req, res) => {
   }
 };
 
-// ─── @route   POST /api/tasks/:id/subtasks ───────────────────
-// ─── @access  Private
 const addSubtask = async (req, res) => {
   try {
     const task = await Task.findOne({ _id: req.params.id, user: req.user._id });
@@ -184,8 +172,7 @@ const addSubtask = async (req, res) => {
   }
 };
 
-// ─── @route   PATCH /api/tasks/:id/subtasks/:subtaskId ───────
-// ─── @access  Private
+
 const toggleSubtask = async (req, res) => {
   try {
     const task = await Task.findOne({ _id: req.params.id, user: req.user._id });
@@ -211,8 +198,7 @@ const toggleSubtask = async (req, res) => {
   }
 };
 
-// ─── @route   POST /api/tasks/:id/comments ───────────────────
-// ─── @access  Private
+
 const addComment = async (req, res) => {
   try {
     const task = await Task.findOne({ _id: req.params.id, user: req.user._id });
