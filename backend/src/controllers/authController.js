@@ -2,15 +2,14 @@ const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const User = require('../models/User');
 
-// ─── Helper: generate JWT ──────────────────────────────────────
+
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
   });
 };
 
-// ─── @route   POST /api/auth/register ─────────────────────────
-// ─── @access  Public
+
 const register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -47,8 +46,6 @@ const register = async (req, res) => {
   }
 };
 
-// ─── @route   POST /api/auth/login ────────────────────────────
-// ─── @access  Public
 const login = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -84,8 +81,7 @@ const login = async (req, res) => {
   }
 };
 
-// ─── @route   GET /api/auth/me ────────────────────────────────
-// ─── @access  Private
+
 const getMe = async (req, res) => {
   res.json({
     success: true,
@@ -99,8 +95,7 @@ const getMe = async (req, res) => {
   });
 };
 
-// ─── @route   PUT /api/auth/me ────────────────────────────────
-// ─── @access  Private
+
 const updateMe = async (req, res) => {
   const { name, email } = req.body;
 
