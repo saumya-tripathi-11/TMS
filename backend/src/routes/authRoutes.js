@@ -5,7 +5,7 @@ const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// ─── Validation rules ─────────────────────────────────────────
+
 const registerRules = [
   body('name')
     .trim()
@@ -23,7 +23,7 @@ const loginRules = [
   body('password').notEmpty().withMessage('Password is required'),
 ];
 
-// ─── Routes ───────────────────────────────────────────────────
+
 router.post('/register', registerRules, register);
 router.post('/login',    loginRules,    login);
 router.get('/me',        protect,       getMe);
