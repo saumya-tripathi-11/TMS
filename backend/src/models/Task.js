@@ -86,11 +86,11 @@ const taskSchema = new mongoose.Schema(
     comments: [commentSchema],
   },
   {
-    timestamps: true, // createdAt + updatedAt from ER diagram
+    timestamps: true,
   }
 );
 
-// Index for faster queries by user
+
 taskSchema.index({ user: 1, status: 1 });
 taskSchema.index({ user: 1, createdAt: -1 });
 
